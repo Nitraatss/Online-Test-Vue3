@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Online Test Vue 3</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;800&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="main-container" id="app">
+      <h1 class="main-title">Тест на тему инвестиций</h1>
+      <section class="playground">
+        <div class="playground__screen playground__screen--game" v-if="questionIndex < questions.length">
+          <h2 class="playground__title">{{ questions[questionIndex].question }}</h2>
+          <div class="playground__options">
+            <button
+              class="playground__option"
+              type="button"
+              v-for="answer, id in questions[questionIndex].answers"
+              :data-value="id"
+              :class="
+              {
+                'playground__option--correct': (id + 1) === questions[questionIndex].correctAnswer  && selectedAnswer !== ''
+              },
+              {
+                'playground__option--incorrect': selectedAnswer === (id + 1),
+              }"
+              @click="onAnswerClick($event)"
+              :disabled="selectedAnswer !== ''"
+            >
+              {{ answer }}
+            </button>
+          </div>
+          <div class="playground__bottom-buttons">
+            <button
+              class="playground__blue-button"
+              type="button"
+              v-show="selectedAnswer !== '' && questionIndex !== questions.length - 1"
+              @click="onNextClick"
+            >
+              Далее
+            </button>
+            <button
+              class="playground__blue-button"
+              type="button"
+              v-show="selectedAnswer !== '' && questionIndex === questions.length - 1"
+              @click="onShowResultsClick"
+            >
+              Посмотреть результаты
+            </button>
+          </div>
+        </div>
+
+        <div class="playground__screen playground__screen--results" v-else>
+          <h2 class="playground__title">Результаты</h2>
+          <div class="playground__results">
+            <p class="playground__result-text">Количество правильных ответов: <b>{{correctCounter}}</b></p>
+            <p class="playground__result-text">Количество неверных ответов: <b>{{incorrectCounter}}</b></p>
+          </div>
+          <div class="playground__bottom-buttons">
+            <button
+              class="playground__blue-button"
+              type="button"
+              @click="onAgainClick"
+            >
+              Пройти снова
+          </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
